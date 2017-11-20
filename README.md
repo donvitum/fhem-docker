@@ -41,3 +41,12 @@ and backups are a bit easier - but also bigger...
 - Integrate MQTT, Influx and Grafana
 
 Suggestion etc. on how to do this are welcome!
+
+## Helpful
+
+Since we work in a Docker environment it would be helpful to have something to manage
+the einvironment with a graphical interface. I used "Portainer" and find it very helpful:
+
+docker run -d -p 9000:9000 --restart always --name portainer -v portainer_data:/data -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer 
+
+(all in one line!)
