@@ -19,6 +19,9 @@ services:
             - "7072"
             - "8083"
             - "8383"
+            - "2121"
+        ports:
+            - "2121:2121"
         build: fhem
         container_name: fhem
         privileged: true
@@ -28,6 +31,7 @@ services:
         volumes:
             - fhem:/opt/fhem
         networks:
+            - frontend
             - backend
             - database
         depends_on:

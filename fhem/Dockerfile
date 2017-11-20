@@ -58,7 +58,9 @@ libtext-diff-perl
 RUN apt-get install -y --force-yes dh-make-perl
 RUN export PERL_MM_USE_DEFAULT=1 && \
     cpan -i Module:Pluggable && \
-    cpan -i REST::Client
+    cpan -i REST::Client && \
+    cpan install Net::WebSocket::Server && \
+    cpan install JSON
 
 # Install fhem
 RUN echo Europe/Berlin > /etc/timezone
