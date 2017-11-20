@@ -4,26 +4,43 @@ attr global icon it_network
 attr global logfile -
 attr global modpath .
 attr global motd none
+attr global nofork 1
+attr global perlSyntaxCheck 1
 attr global room System
 attr global sendStatistics onUpdate
 attr global statefile ./log/fhem.save
 attr global updateInBackground 0
 attr global verbose 2
-attr global nofork 1
-attr global perlSyntaxCheck 1
 
 define telnetPort telnet 7072 global
 attr telnetPort room System
 
 define WEB FHEMWEB 8083 global
 attr WEB JavaScripts codemirror/fhem_codemirror.js
+attr WEB confirmDelete 0
 attr WEB editConfig 1
 attr WEB icon it_i-net
-attr WEB menuEntries haus-automatisierung.com,https://haus-automatisierung.com/
+attr WEB longpoll 1
 attr WEB plotWeekStartDay 1
 attr WEB room System
-attr WEB roomIcons Homekit:audio_audio Log:edit_paste System:it_network Save.config:message_attention Everything:it_i-net Unsorted:unknown Commandref:system_fhem Remote.doc:message_mail Edit.files:edit_copy Select.style:edit_open Event.monitor:edit_settings
-attr WEB title FHEM Docker (haus-automatisierung.com)
+attr WEB stylesheetPrefix dark
+attr WEB title FHEM Docker
+# attr WEB roomIcons Homekit:audio_audio Log:edit_paste System:it_network Save.config:message_attention Everything:it_i-net Unsorted:unknown Commandref:system_fhem Remote.doc:message_mail Edit.files:edit_copy Select.style:edit_open Event.monitor:edit_settings
+
+define WEBhabridge FHEMWEB 8383 global
+attr WEBhabridge csrfToken none
+attr WEBhabridge editConfig 0
+attr WEBhabridge icon it_i-net
+attr WEBhabridge longpoll websocket
+attr WEBhabridge room System
+
+define allowed_WEBhabridge allowed
+attr allowed_WEBhabridge allowedCommands get,set
+attr allowed_WEBhabridge room System
+attr allowed_WEBhabridge validFor WEBhabridge
+
+define TABLETUI HTTPSRV ftui/ ./www/tablet Tablet-UI
+attr TABLETUI room System
 
 # Fake FileLog entry, to access the fhem log from FHEMWEB
 define Logfile FileLog ./log/fhem-%Y-%m.log fakelog
@@ -40,13 +57,41 @@ attr eventTypes room System
 # Disable this to avoid looking for new USB devices on startup
 define initialUsbCheck notify global:INITIALIZED usb create
 attr initialUsbCheck room System
+
 define DBLogging DbLog /opt/fhem/contrib/dblog/db.conf .*:.*
 attr DBLogging icon time_note
 attr DBLogging room Log
+
 define DBLogging_Reopen at +*00:15:00 set DBLogging reopen
 attr DBLogging_Reopen room Log
+
 define testSwitch dummy
 attr testSwitch genericDeviceType switch
 attr testSwitch room Homekit
 attr testSwitch setList on off
 attr testSwitch webCmd on:off
+
+define ZWAVE_USB ZWDongle /dev/ttyACM0@115200
+attr ZWAVE_USB icon cul_usb
+attr ZWAVE_USB room Z-WAVE
+
+define nanoCUL868 CUL /dev/ttyUSB0@38400 1234
+attr nanoCUL868 hmId 8D2D0C
+attr nanoCUL868 icon cul_868
+attr nanoCUL868 rfmode HomeMatic
+attr nanoCUL868 room HOMEMATIC
+
+define myCCU CUL_HM 8D2D0C
+attr myCCU IODev nanoCUL868
+attr myCCU IOList nanoCUL868
+attr myCCU expert 2_raw
+attr myCCU model CCU-FHEM
+attr myCCU room HOMEMATIC
+attr myCCU subType virtual
+attr myCCU webCmd virtual:update
+
+define ActionDetector CUL_HM 000000
+attr ActionDetector event-on-change-reading .*
+attr ActionDetector model ActionDetector
+attr ActionDetector room HOMEMATIC
+

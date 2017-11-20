@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-MAINTAINER Matthias Kleine <info@haus-automatisierung.com>
+MAINTAINER Norman Sahl
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV TERM xterm
@@ -9,7 +9,8 @@ ENV TERM xterm
 RUN apt-get update && apt-get upgrade -y --force-yes && apt-get install -y --force-yes --no-install-recommends apt-utils
 RUN apt-get install -y --force-yes xz-utils wget python libavahi-compat-libdnssd-dev
 
-RUN echo Europe/Berlin > /etc/timezone && dpkg-reconfigure tzdata
+RUN echo Europe/Berlin > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
 
 RUN wget https://nodejs.org/dist/v6.9.2/node-v6.9.2-linux-x64.tar.xz -P /tmp && cd /usr/local && tar -xvf /tmp/node-v6.9.2-linux-x64.tar.xz --strip=1
 RUN ln -s /usr/local/bin/node /usr/bin/node
@@ -22,5 +23,7 @@ RUN npm install -g homebridge homebridge-fhem homebridge-http
 
 EXPOSE 51826
 
+COPY config.json ./.homebridge/config.json
 COPY start.sh ./
+
 CMD bash ./start.sh

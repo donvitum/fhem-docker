@@ -1,29 +1,40 @@
 version: '2'
 
 services:
+    proxy:
+        expose:
+            - "80"
+            - "8080"
+        ports:
+            - "80:80"
+            - "8080:8080"
+        build: proxy
+        container_name: proxy
+        volumes:
+            - proxy:/etc/apache2/
+        networks:
+            - frontend
+            - backend
+
     fhem:
         expose:
-            - "8083"
             - "7072"
-        ports:
-            - "8083:8083"
-            - "7072:7072"
+            - "8083"
+            - "8383"
         build: fhem
+        container_name: fhem
         privileged: true
         devices:
           - "/dev/ttyUSB0:/dev/ttyUSB0"
+          - "/dev/ttyACM0:/dev/ttyACM0"
         volumes:
-            - ./fhem/start.sh:/opt/fhem/start.sh
-            - ./fhem/log/:/opt/fhem/log
-            - ./fhem/backup/:/opt/fhem/backup
-            - ./fhem/data/fhem.cfg:/opt/fhem/fhem.cfg
-            - ./fhem/data/FHEM/controls.txt:/opt/fhem/FHEM/controls.txt
-            - ./fhem/data/FHEM/99_myUtils.pm:/opt/fhem/FHEM/99_myUtils.pm
-            - ./fhem/data/contrib/dblog/db.conf:/opt/fhem/contrib/dblog/db.conf
+            - fhem:/opt/fhem
         networks:
-            - code-network
+            - backend
+            - database
         depends_on:
             - "mysql"
+            - "proxy"
 
     homebridge:
         expose:
@@ -35,11 +46,35 @@ services:
             - "8282:8282"
             - "5353:5353"
         build: homebridge
+        container_name: homebridge
         volumes:
-            - ./homebridge/start.sh:/root/start.sh
-            - ./homebridge/config.json:/root/.homebridge/config.json
+            - homebridge:/root
+        network_mode: host
+        depends_on:
+            - "fhem"
+
+    habridge:
+        expose:
+            - "8888"
+        ports:
+            - "8888:8888"
+        build: habridge
+        container_name: habridge
+        volumes:
+            - habridge:/config
+        network_mode: host
+        depends_on:
+            - "fhem"
+
+    smartvisu:
+        expose:
+            - "80"
+        build: smartvisu
+        container_name: smartvisu
+        volumes:
+            - smartvisu:/usr/share/nginx
         networks:
-            - code-network
+            - backend
         depends_on:
             - "fhem"
 
@@ -47,18 +82,28 @@ services:
         expose:
             - "3306"
             - "33060"
-        ports:
-            - "3306:3306"
-            - "33060:33060"
         image: mysql/mysql-server:5.7
+        container_name: mysql
         volumes:
             - ./mysql/init.sql:/docker-entrypoint-initdb.d/fhem-init.sql
-            - ./mysql/data:/var/lib/mysql
+            - mysql:/var/lib/mysql
         environment:
             - MYSQL_RANDOM_ROOT_PASSWORD=yes
         networks:
-            - code-network
+            - database
 
 networks:
-    code-network:
+    frontend:
         driver: bridge
+    backend:
+        driver: bridge
+    database:
+        driver: bridge
+
+volumes:
+    fhem:
+    mysql:
+    homebridge:
+    proxy:
+    habridge:
+    smartvisu:

@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-MAINTAINER Matthias Kleine <info@haus-automatisierung.com>
+MAINTAINER Norman Sahl
 
 ENV FHEM_VERSION 5.8
 ENV DEBIAN_FRONTEND noninteractive
@@ -13,8 +13,10 @@ perl \
 wget \
 git \
 apt-transport-https \
-sudo etherwake \
+sudo \
+etherwake \
 dfu-programmer \
+make \
 build-essential \
 snmpd \
 snmp \
@@ -52,17 +54,38 @@ libxml-simple-perl \
 libdbd-sqlite3-perl \
 libtext-diff-perl
 
+# Install Missing Perl Modules
+RUN apt-get install -y --force-yes dh-make-perl
+RUN export PERL_MM_USE_DEFAULT=1 && \
+    cpan -i Module:Pluggable && \
+    cpan -i REST::Client
+
 # Install fhem
-RUN echo Europe/Berlin > /etc/timezone && dpkg-reconfigure tzdata
+RUN echo Europe/Berlin > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
 
 RUN wget https://fhem.de/fhem-${FHEM_VERSION}.deb && dpkg -i fhem-${FHEM_VERSION}.deb
 RUN userdel fhem
 
+RUN git clone https://github.com/herrmannj/fronthem
+RUN cp ./fronthem/FHEM/* /opt/fhem/FHEM/
+RUN cp -r ./fronthem/www/* /opt/fhem/www/
+RUN rm -r ./fronthem
+
+RUN git clone https://github.com/knowthelist/fhem-tablet-ui
+RUN cp -r ./fhem-tablet-ui/www/tablet/ /opt/fhem/www/
+RUN cp ./fhem-tablet-ui/gen_iconsdemo.pl /opt/fhem/www/
+RUN cp /opt/fhem/www/tablet/index_empty.html /opt/fhem/www/tablet/index.html 
+RUN rm -r ./fhem-tablet-ui
+
 WORKDIR "/opt/fhem"
 
+COPY data/FHEM/controls.txt ./FHEM/controls.txt
+COPY data/FHEM/99_myUtils.pm ./FHEM/99_myUtils.pm
+COPY data/contrib/dblog/db.conf ./contrib/dblog/db.conf
 COPY data/fhem.cfg.example ./fhem.cfg
 COPY start.sh ./
 
-EXPOSE 8083 7072
+EXPOSE 8383 8083 7072
 
 CMD bash /opt/fhem/start.sh

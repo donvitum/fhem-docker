@@ -1,10 +1,13 @@
-# FHEM Docker Base
+# FHEM Installation based on Docker
 
-## Contains
+## Contains containerized installs
 
-- FHEM + haus-automatisierung.com FHEM frontend style + Tablet UI + ABFALL Module
-- Homebridge + FHEM Homebridge
-- mySQL-Logging
+- FHEM basic (based on DEBIAN 8 / Jessie)
+- Homebridge (for Apple / Siri - based on DEBIAN 8 / Jessie)
+- HA-Bridge (for Alexa etc. - based on DEBIAN 8 / Jessie)
+- SmartVisu (NGINX Web Server, PHP5 - based on DEBIAN 8 / Jessie)
+- mySQL-Logging (based on mysql57 Docker image)
+- reverse proxy (based on Apache2 - based on DEBIAN 8 / Jessie)
 
 ## Requirements
 
@@ -14,10 +17,9 @@
 ## Install
 
 ```
-git clone https://github.com/klein0r/fhem-docker.git fhem-docker
+git clone https://github.com/eszych/fhem-docker.git
 cd fhem-docker
-cp ./fhem/data/fhem.cfg.example ./fhem/data/fhem.cfg
-docker-compose up
+docker-compose up --build -d
 ```
 
 ## Defaults
@@ -26,7 +28,9 @@ docker-compose up
 - mySQL-User: fhemuser
 - mySQL-Password: 2jRHnEi3WuNSQAcX7
 - Homekit-Pairing-Code: 012-34-567
+- HA-Bridge, SmartVisu, TabletUI are default installations - no customization
 
 ## Updating FHEM
 
-Since all data in the container is static, you have to delete the container and recreate it to update fhem.
+Since each container has a volume mounted from the filesystem, updates are persistent
+and backups are a bit easier - but also bigger...
