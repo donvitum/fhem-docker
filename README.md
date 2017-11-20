@@ -34,3 +34,10 @@ docker-compose up --build -d
 
 Since each container has a volume mounted from the filesystem, updates are persistent
 and backups are a bit easier - but also bigger...
+
+## Future Plans
+
+- Integrate Let's Encrypt for the reverse proxy 
+- Integrate MQTT, Influx and Grafana
+
+Suggestion etc. on how to do this are welcome!
