@@ -15,6 +15,20 @@ services:
             - frontend
             - backend
 
+    portainer:
+        container_name: portainer
+        expose:
+            - "9000"
+        ports:
+            - "9000:9000"
+        image: portainer/portainer
+        container_name: portainer
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - portainer:/data portainer/portainer
+        networks:
+            - frontend
+
     fhem:
         restart: always
         expose:
@@ -148,3 +162,4 @@ volumes:
     smartvisu:
     nodered:
     mqtt:
+    portainer:
