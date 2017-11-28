@@ -2,6 +2,7 @@ version: '2'
 
 services:
     proxy:
+        restart: always
         expose:
             - "80"
         ports:
@@ -15,6 +16,7 @@ services:
             - backend
 
     fhem:
+        restart: always
         expose:
             - "7072"
             - "8083"
@@ -31,7 +33,6 @@ services:
         volumes:
             - fhem:/opt/fhem
         networks:
-            - frontend
             - backend
             - database
         depends_on:
@@ -39,6 +40,7 @@ services:
             - "proxy"
 
     homebridge:
+        restart: always
         expose:
             - "51826"
             - "8282"
@@ -56,6 +58,7 @@ services:
             - "fhem"
 
     habridge:
+        restart: always
         expose:
             - "8888"
         ports:
@@ -69,6 +72,7 @@ services:
             - "fhem"
 
     smartvisu:
+        restart: always
         expose:
             - "80"
         build: smartvisu
@@ -81,6 +85,7 @@ services:
             - "fhem"
 
     mysql:
+        restart: always
         expose:
             - "3306"
             - "33060"
@@ -93,6 +98,36 @@ services:
             - MYSQL_RANDOM_ROOT_PASSWORD=yes
         networks:
             - database
+
+    mqtt:
+        restart: always
+        expose:
+            - "1883"
+            - "9001"
+        ports:
+            - "1883:1883"
+            - "9001:9001"
+        image: toke/mosquitto
+        networks:
+            - frontend
+            - backend
+        volumes:
+            - mqtt:/mqtt
+
+    nodered:
+        restart: always
+        expose:
+            - "1880"
+        ports:
+            - "1880:1880"
+        image: nodered/node-red-docker:0.17.5
+        volumes:
+            - nodered:/data
+        networks:
+            - frontend
+            - backend
+        depends_on:
+            - "mqtt"
 
 networks:
     frontend:
@@ -109,3 +144,5 @@ volumes:
     proxy:
     habridge:
     smartvisu:
+    nodered:
+    mqtt:

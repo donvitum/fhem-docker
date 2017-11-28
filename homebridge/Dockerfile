@@ -1,7 +1,5 @@
 FROM debian:jessie
 
-MAINTAINER Norman Sahl
-
 ENV DEBIAN_FRONTEND noninteractive
 ENV TERM xterm
 
