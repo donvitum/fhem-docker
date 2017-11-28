@@ -85,18 +85,19 @@ services:
         depends_on:
             - "fhem"
 
-    smartvisu:
-        restart: always
-        expose:
-            - "80"
-        build: smartvisu
-        container_name: smartvisu
-        volumes:
-            - smartvisu:/usr/share/nginx
-        networks:
-            - backend
-        depends_on:
-            - "fhem"
+### Temporary removed ###
+#    smartvisu:
+#        restart: always
+#        expose:
+#            - "80"
+#        build: smartvisu
+#        container_name: smartvisu
+#        volumes:
+#            - smartvisu:/usr/share/nginx
+#        networks:
+#            - backend
+#        depends_on:
+#            - "fhem"
 
     mysql:
         restart: always
