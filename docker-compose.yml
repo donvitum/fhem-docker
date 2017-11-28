@@ -138,6 +138,7 @@ services:
             - "1880:1880"
         image: nodered/node-red-docker:0.17.5
         container_name: nodered
+        build: nodered
         volumes:
             - nodered:/data
         networks:
