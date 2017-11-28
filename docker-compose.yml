@@ -108,6 +108,7 @@ services:
             - "1883:1883"
             - "9001:9001"
         image: toke/mosquitto
+        container_name: mqtt
         networks:
             - frontend
             - backend
@@ -121,6 +122,7 @@ services:
         ports:
             - "1880:1880"
         image: nodered/node-red-docker:0.17.5
+        container_name: nodered
         volumes:
             - nodered:/data
         networks:
