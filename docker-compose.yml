@@ -137,10 +137,10 @@ services:
         ports:
             - "1880:1880"
         image: nodered/node-red-docker:0.17.5
-        container_name: nodered
         build: nodered
+        container_name: nodered
         volumes:
-            - nodered:/data
+            - nodered:/data/
         networks:
             - frontend
             - backend
