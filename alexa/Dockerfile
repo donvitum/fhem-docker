@@ -1,5 +1,14 @@
 FROM node
 
+ENV DEBIAN_FRONTEND noninteractive
+ENV TERM xterm
+
+RUN apt-get update && apt-get -y upgrade && apt-get install -y --force-yes --no-install-recommends apt-utils
+RUN apt-get install -y --force-yes wget tzdata nano curl netcat
+
+RUN echo Europe/Berlin > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
+
 # Create app directory
 WORKDIR /opt/alexa-fhem
 

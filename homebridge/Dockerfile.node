@@ -1,0 +1,35 @@
+FROM node
+
+ENV DEBIAN_FRONTEND noninteractive
+ENV TERM xterm
+
+# Install dependencies
+RUN apt-get update && apt-get upgrade -y --force-yes && apt-get install -y --force-yes --no-install-recommends apt-utils
+RUN apt-get install -y --force-yes xz-utils curl nano tzdata wget python apt-transport-https netcat
+RUN apt-get install -y --force-yes libnss-mdns avahi-discover libavahi-compat-libdnssd-dev libkrb5-dev
+RUN apt-get install -y --force-yes ffmpeg nano vim make make gcc g++
+
+RUN echo Europe/Berlin > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
+
+# RUN wget https://nodejs.org/dist/v6.9.2/node-v6.9.2-linux-x64.tar.xz -P /tmp && cd /usr/local && tar -xvf /tmp/node-v6.9.2-linux-x64.tar.xz --strip=1
+# RUN ln -s /usr/local/bin/node /usr/bin/node
+
+ENV NODE_ENV production
+
+RUN npm install -g homebridge homebridge-fhem homebridge-http --unsafe-perm
+
+COPY avahi-daemon.conf /etc/avahi/avahi-daemon.conf
+
+USER root
+RUN mkdir -p /var/run/dbus
+
+EXPOSE 5353 51826
+
+COPY config.json ./.homebridge/config.json
+COPY start.sh ./
+
+# Run container
+# CMD ["/root/run.sh"]
+
+CMD /bin/bash ./start.sh

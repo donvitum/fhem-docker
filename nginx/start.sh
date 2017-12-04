@@ -35,19 +35,19 @@ fi
 echo Waiting for folder /etc/letsencrypt/live/$MY_DOMAIN_NAME to exist
 while [ ! -d /etc/letsencrypt/live/$MY_DOMAIN_NAME ] ;
 do
-    sleep 2
+    sleep 3
 done
 
 while [ ! -f /etc/letsencrypt/live/$MY_DOMAIN_NAME/fullchain.pem ] ;
 do
     echo Waiting for file fullchain.pem to exist
-    sleep 2
+    sleep 3
 done
 
 while [ ! -f /etc/letsencrypt/live/$MY_DOMAIN_NAME/privkey.pem ] ;
 do
     echo Waiting for file privkey.pem to exist
-    sleep 2
+    sleep 3
 done
 
 echo replacing ___my.example.com___/$MY_DOMAIN_NAME
@@ -58,7 +58,6 @@ echo replacing ___my.example.com___/$MY_DOMAIN_NAME
 #echo replacing ___LETSENCRYPT_HTTPS_PORT___/$LETSENCRYPT_PORT_443_TCP_PORT
 #echo replacing ___APPLICATION_IP___/$APP_PORT_80_TCP_ADDR
 #echo replacing ___APPLICATION_PORT___/$APP_PORT_80_TCP_PORT
-
 
 # Put your domain name into the nginx reverse proxy config.
 sed -i "s/___my.example.com___/$MY_DOMAIN_NAME/g" /etc/nginx/nginx-secure.conf
@@ -75,6 +74,7 @@ sed -i "s/___my.example.com___/$MY_DOMAIN_NAME/g" /etc/nginx/nginx-secure.conf
 
 #go!
 kill $(ps aux | grep '[n]ginx' | awk '{print $2}')
+sleep 3
 cp /etc/nginx/nginx-secure.conf /etc/nginx/nginx.conf
 
 nginx -g 'daemon off;'
