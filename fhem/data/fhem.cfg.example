@@ -1,4 +1,4 @@
-attr global userattr DbLogExclude DbLogInclude cmdIcon devStateIcon devStateStyle genericDeviceType:security,ignore,switch,outlet,light,blind,thermometer,thermostat,contact,garage,window,lock homebridgeMapping:textField-long icon sortby webCmd widgetOverride
+attr global userattr DbLogExclude DbLogInclude alexaName alexaRoom cmdIcon devStateIcon devStateStyle genericDeviceType:security,ignore,switch,outlet,light,blind,thermometer,thermostat,contact,garage,window,lock homebridgeMapping:textField-long icon sortby webCmd widgetOverride
 attr global autoload_undefined_devices 1
 attr global icon it_network
 attr global logfile -
@@ -67,7 +67,7 @@ attr DBLogging_Reopen room Log
 
 define testSwitch dummy
 attr testSwitch genericDeviceType switch
-attr testSwitch room Homekit
+attr testSwitch room Alexa,Homekit
 attr testSwitch setList on off
 attr testSwitch webCmd on:off
 
@@ -95,3 +95,35 @@ attr ActionDetector event-on-change-reading .*
 attr ActionDetector model ActionDetector
 attr ActionDetector room HOMEMATIC
 
+define MyAlexa alexa
+attr MyAlexa alexaMapping #Characteristic=<name>=<value>,...\
+On=verb=schalte,valueOn=an;;ein,valueOff=aus,valueToggle=um\
+\
+Brightness=verb=stelle,property=helligkeit,valuePrefix=auf,values=AMAZON.NUMBER,valueSuffix=prozent\
+\
+Hue=verb=stelle,valuePrefix=auf,values=rot:0;;grün:128;;blau:200\
+Hue=verb=färbe,values=rot:0;;grün:120;;blau:220\
+\
+Saturation=verb=stelle,property=sättigung,valuePrefix=auf,values=AMAZON.NUMBER\
+Saturation=verb=sättige,values=AMAZON.NUMBER\
+\
+TargetPosition=verb=mach,articles=den,values=auf:100;;zu:0\
+TargetPosition=verb=stelle,valuePrefix=auf,values=AMAZON.NUMBER,valueSuffix=prozent\
+\
+TargetTemperature=verb=stelle,valuePrefix=auf,values=AMAZON.NUMBER,valueSuffix=grad\
+\
+Volume:verb=stelle,valuePrefix=auf,values=AMAZON.NUMBER,valueSuffix=prozent\
+\
+#Weckzeit=verb=stelle,valuePrefix=auf;;für,values=AMAZON.TIME,valueSuffix=uhr
+attr MyAlexa alexaTypes #Type=<alias>[,<alias2>[,...]]\
+light=licht,lampen\
+blind=rolladen,rolläden,jalousie,jalousien,rollo,rollos
+attr MyAlexa fhemIntents #IntentName=<sample utterance>\
+gutenMorgen=guten morgen\
+guteNacht=gute nacht
+attr MyAlexa room System
+define Alexa.Party dummy
+attr Alexa.Party alexaName party
+attr Alexa.Party genericDeviceType switch
+attr Alexa.Party room Alexa
+attr Alexa.Party setList on off
