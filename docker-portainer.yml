@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+
+    portainer:
+        expose:
+            - "9000"
+        ports:
+            - "9000:9000"
+        image: portainer/portainer
+        container_name: portainer
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - portainer:/data portainer/portainer
+        network_mode: host
+
+volumes:
+    portainer:

@@ -47,21 +47,23 @@ services:
 #        networks:
 #            - backend
 ############################
-
-    portainer:
-        expose:
-            - "9000"
-        ports:
-            - "9000:9000"
-        image: portainer/portainer
-        container_name: portainer
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-            - portainer:/data portainer/portainer
-        networks:
-            - backend
-        depends_on:
-            - "nginx"
+# Moved to its own docker-compose file
+# docker-portainer.yml
+#    portainer:
+#        expose:
+#            - "9000"
+#        ports:
+#            - "9000:9000"
+#        image: portainer/portainer
+#        container_name: portainer
+#        volumes:
+#            - /var/run/docker.sock:/var/run/docker.sock
+#            - portainer:/data portainer/portainer
+#        networks:
+#            - backend
+#        depends_on:
+#            - "nginx"
+############################
 
     fhem:
         restart: always
