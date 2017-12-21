@@ -54,7 +54,6 @@ libtext-diff-perl \
 libcrypt-cbc-perl \
 libcrypt-rijndael-perl \
 libssl-dev
-sudo cpan Crypt/OpenSSL/AES.p
 
 # Install Missing Perl Modules
 RUN apt-get install -y --force-yes dh-make-perl
