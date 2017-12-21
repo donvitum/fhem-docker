@@ -50,7 +50,11 @@ libterm-readline-perl-perl \
 libwww-perl \
 libxml-simple-perl \
 libdbd-sqlite3-perl \
-libtext-diff-perl
+libtext-diff-perl \
+libcrypt-cbc-perl \
+libcrypt-rijndael-perl \
+libssl-dev
+sudo cpan Crypt/OpenSSL/AES.p
 
 # Install Missing Perl Modules
 RUN apt-get install -y --force-yes dh-make-perl
@@ -58,7 +62,8 @@ RUN export PERL_MM_USE_DEFAULT=1 && \
     cpan -i Module:Pluggable && \
     cpan -i REST::Client && \
     cpan install Net::WebSocket::Server && \
-    cpan install JSON
+    cpan install JSON && \
+    cpan Crypt/OpenSSL/AES.p
 
 # Install fhem
 RUN echo Europe/Berlin > /etc/timezone
