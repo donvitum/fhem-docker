@@ -17,7 +17,7 @@
 ## Install
 
 ```
-git clone https://github.com/eszych/fhem-docker.git
+git clone https://github.com/donvitum/fhem-docker.git
 cd fhem-docker
 docker-compose up --build -d
 ```
