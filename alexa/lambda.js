@@ -1,6 +1,6 @@
 
 const PORT=3000;
-const HOST='mein.host.name';
+const HOST='fhem.donvitum.de';
 
 
 // entry
