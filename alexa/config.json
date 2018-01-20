@@ -2,12 +2,12 @@
     "alexa": {
         "port": 3000,
         "name": "Alexa TEST",
-        "keyFile": "/etc/letsencrypt/live/landblog.serveblog.net/privkey.pem",
-        "certFile": "/etc/letsencrypt/live/landblog.serveblog.net/cert.pem",
+        "keyFile": "/etc/letsencrypt/live/fhem.donvitum.de/privkey.pem",
+        "certFile": "/etc/letsencrypt/live/fhem.donvitum.de/cert.pem",
         "nat-pmp": "",
         "nat-upnp": false,
-        "applicationId": "amzn1.ask.skill.55bfb48d-ef0d-4ca6-a3ba-149eb78849a3",
-        "oauthClientID": "amzn1.application-oa2-client.583b9dc02b4444138452c3cb0c00c2fe"
+        "applicationId": "amzn1.ask.skill.797ea474-68f5-4dae-b8a3-7f2db8f9a3d6",
+        "oauthClientID": "amzn1.application-oa2-client.2a3511f601b049279496341707dfa17b"
     },
 
     "connections": [
