@@ -15,55 +15,13 @@ services:
         build: nginx
         container_name: nginx
         environment:
-            - MY_DOMAIN_NAME=landblog.serveblog.net
+            - MY_DOMAIN_NAME=fhem.donvitum.de
         volumes:
             - certs:/etc/letsencrypt/
             - nginx:/etc/nginx/
         networks:
             - frontend
             - backend
-#        depends_on:
-#            - "letsencrypt"
-
-############################
-### disabled for testing ###
-#    letsencrypt:
-#        restart: always
-#        expose:
-#            - "80"
-#            - "443"
-#        ports:
-#            - 80:80
-#            - 443:443
-#        container_name: letsencrypt
-#        image: quay.io/letsencrypt/letsencrypt:latest
-#        command:  bash -c "sleep 6 && certbot certonly --standalone -d landblog.serveblog.net --text --agree-tos --email eszych@gmail.com --server https://acme-v01.api.letsencrypt.org/directory --rsa-key-size 4096 --verbose --renew-by-default --standalone-supported-challenges http-01"
-#        entrypoint: ""
-#        environment:
-#            - TERM=xterm
-#        volumes:
-#            - certs:/etc/letsencrypt/
-#            - letsencrypt:/var/lib/letsencrypt
-#        networks:
-#            - backend
-############################
-# Moved to its own docker-compose file
-# docker-portainer.yml
-#    portainer:
-#        expose:
-#            - "9000"
-#        ports:
-#            - "9000:9000"
-#        image: portainer/portainer
-#        container_name: portainer
-#        volumes:
-#            - /var/run/docker.sock:/var/run/docker.sock
-#            - portainer:/data portainer/portainer
-#        networks:
-#            - backend
-#        depends_on:
-#            - "nginx"
-############################
 
     fhem:
         restart: always
@@ -146,22 +104,6 @@ services:
         depends_on:
             - "fhem"
             - "nginx"
-
-############################
-###  Temporary removed  ###
-#    smartvisu:
-#        restart: always
-#        expose:
-#            - "80"
-#        build: smartvisu
-#        container_name: smartvisu
-#        volumes:
-#            - smartvisu:/usr/share/nginx
-#        networks:
-#            - backend
-#        depends_on:
-#            - "fhem"
-############################
 
     mqtt:
         restart: always
